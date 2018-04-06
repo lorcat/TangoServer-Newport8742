@@ -23,7 +23,7 @@ The following commands are implemented:
 2. *GetIDN* - returns identification string of the device
 3. *GetIPAddress* - returns currently assigned IP address
 4. *GetMACAddress* - returns MAC address
-5. *GedUSBParams* - returns USB parameters - product ID and vendor ID in a human readable form
+5. *GetUSBParams* - returns USB parameters - product ID and vendor ID in a human readable form
 6. *Reinitialize* - performs an attempt to reinitialize the connection to the device (device reboot and etc.)
 
 The following attributes are implemented:
