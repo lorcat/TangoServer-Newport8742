@@ -314,6 +314,15 @@ class Pico8742Channel(CommonDevice):
                           fget="get_response_time", unit="ms",
                           doc="Average response time of command execution")
 
+    # average response time of command execution
+    UnitLimitMin = attribute(label="Position minimum (dummy)", dtype=float,
+                             fget="get_userlim_min",
+                             doc="Minimal position limit (user level)")
+
+    UnitLimitMax = attribute(label="Position maximum (dummy)", dtype=float,
+                             fget="get_userlim_max",
+                             doc="Maximal position limit (user level)")
+
     # device property - channel number
     channel = device_property(dtype=int, default_value=1,  update_db=True)
     axisname = device_property(dtype=str, default_value="channel0", update_db=True)
@@ -329,6 +338,8 @@ class Pico8742Channel(CommonDevice):
     VA = "VA"
     # motor type
     QM = "QM"
+    # Motor state
+    MD = "MD"
 
     def __init__(self, *args, **kwargs):
         CommonDevice.__init__(self, *args, **kwargs)
@@ -417,7 +428,7 @@ class Pico8742Channel(CommonDevice):
             self.total_commands += 1
             self.total_time += dt
 
-            self.set_state(DevState.ON)
+            # self.set_state(DevState.ON)
         else:
             self.set_state(DevState.FAULT)
 
@@ -465,7 +476,7 @@ class Pico8742Channel(CommonDevice):
             self.total_commands += 1
             self.total_time += dt
 
-            self.set_state(DevState.ON)
+            # self.set_state(DevState.ON)
         else:
             self.set_state(DevState.FAULT)
 
@@ -492,6 +503,33 @@ class Pico8742Channel(CommonDevice):
         res = ""
         if self.axsname is not None:
             res = "{}".format(self.axsname)
+        return res
+
+    def get_userlim_min(self):
+        """
+        DUMMY
+        :return:
+        """
+        res = float(-10E6)
+        return res
+
+    def get_userlim_max(self):
+        """
+        DUMMY
+        :return:
+        """
+        res = float(10E6)
+        return res
+
+    def dev_state(self):
+        """
+        Obtains state of the motor and returns it
+        :return:
+        """
+        res = DevState.ON
+        temp = self.get_cmd(ch=self.chnum, cmd=self.MD)
+        if temp == 0:
+            res = DevState.MOVING
         return res
 
 if __name__ == "__main__":
